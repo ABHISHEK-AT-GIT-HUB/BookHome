@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - BookHome</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">
+          <h1>📚 BookHome</h1>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li>
+            <a href="#" id="profileLink" style="display: none">Profile</a>
+          </li>
+          <li><a href="login.html" id="loginLink">Login</a></li>
+          <li>
+            <a href="#" id="cartLink" class="cart-link"
+              >Cart (<span id="cartCount">0</span>)</a
+            >
+          </li>
+        </ul>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Signup Section -->
+    <section class="auth-page-section">
+      <div class="auth-container">
+        <h2>Create an Account</h2>
+        <form id="signupForm" class="enhanced-form">
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input type="text" placeholder="Full Name" required />
+          </div>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="email" placeholder="Email" required />
+          </div>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" placeholder="Password" required />
+          </div>
+          <button type="submit" class="btn-primary">Sign Up</button>
+          <p>Already have an account? <a href="login.html">Login</a></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#" id="termsLink">Terms & Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" class="social-icon">Facebook</a>
+            <a href="#" class="social-icon">Instagram</a>
+            <a href="#" class="social-icon">Twitter</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 BookHome. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Modals needed for footer links etc. -->
+    <div id="termsModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Terms & Conditions</h2>
+        <div class="terms-content">
+          <p>Terms content...</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

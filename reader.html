@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Reader - BookHome</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="reader-body">
+    <!-- Reader Header -->
+    <header class="reader-header">
+      <div class="reader-nav">
+        <button onclick="window.history.back()" class="btn-back">← Back</button>
+        <h2 id="readerBookTitle">Book Title</h2>
+        <div class="reader-controls">
+          <!-- <button id="readerThemeToggle" class="theme-btn">🌙</button> -->
+          <button onclick="window.print()" class="btn-icon">🖨️</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Reader Content -->
+    <main class="reader-main">
+      <div class="reader-container">
+        <div class="reader-content" id="readerContent">
+          <!-- Book content will be loaded here -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Reader Footer -->
+    <footer class="reader-footer">
+      <div class="reader-pagination">
+        <button id="prevPage" class="btn-pagination">← Previous</button>
+        <span id="pageInfo">Page 1 of 10</span>
+        <button id="nextPage" class="btn-pagination">Next →</button>
+      </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

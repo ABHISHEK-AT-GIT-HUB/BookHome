@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - BookHome</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Admin Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">
+          <h1>📚 BookHome Admin</h1>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="index.html">Back to Site</a></li>
+          <li>
+            <button id="adminLogout" class="btn-secondary">Logout</button>
+          </li>
+          <!-- <li><button id="themeToggle" class="theme-btn">🌙</button></li> -->
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Admin Auth Section (Login + Signup only on admin page) -->
+    <div id="adminAuth" class="admin-auth">
+      <div class="auth-container">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Login</button>
+          <button class="auth-tab" data-tab="signup">Sign Up</button>
+        </div>
+
+        <div id="adminLoginForm" class="auth-form">
+          <h2>Admin Login</h2>
+          <p
+            class="admin-note"
+            style="text-align: center; color: #666; margin-bottom: 20px"
+          >
+            Existing admins login here. Signup is available only on this page.
+          </p>
+          <input
+            type="email"
+            id="adminLoginEmail"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            id="adminLoginPassword"
+            placeholder="Password"
+            required
+          />
+          <button class="btn-primary" onclick="adminLogin()">Login</button>
+        </div>
+
+        <div id="adminSignupForm" class="auth-form" style="display: none">
+          <h2>Admin Sign Up</h2>
+          <p
+            class="admin-note"
+            style="text-align: center; color: #666; margin-bottom: 20px"
+          >
+            Create a new admin account (admin use only).
+          </p>
+          <input
+            type="text"
+            id="adminSignupName"
+            placeholder="Full Name"
+            required
+          />
+          <input
+            type="email"
+            id="adminSignupEmail"
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            id="adminSignupPassword"
+            placeholder="Password"
+            required
+          />
+          <button class="btn-primary" onclick="adminSignup()">Sign Up</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard" style="display: none">
+      <div class="container">
+        <h1 class="admin-title">Admin Dashboard</h1>
+
+        <!-- Add Book Form -->
+        <section class="admin-section">
+          <h2>Add New Book</h2>
+          <form id="addBookForm" class="book-form">
+            <input
+              type="text"
+              id="bookTitle"
+              placeholder="Book Title"
+              required
+            />
+            <input
+              type="text"
+              id="bookAuthor"
+              placeholder="Author Name"
+              required
+            />
+            <input
+              type="number"
+              id="bookPrice"
+              placeholder="Price (0 for free)"
+              min="0"
+              step="0.01"
+              required
+            />
+            <input
+              type="number"
+              id="bookStock"
+              placeholder="Stock Quantity"
+              min="0"
+              required
+            />
+            <input type="url" id="bookImage" placeholder="Image URL" required />
+            <textarea
+              id="bookDescription"
+              placeholder="Description"
+              rows="4"
+              required
+            ></textarea>
+            <textarea
+              id="bookContent"
+              placeholder="Book Content (Full text/chapters). You can use HTML tags like &lt;h2&gt; for chapters, &lt;p&gt; for paragraphs, &lt;br&gt; for line breaks."
+              rows="10"
+              required
+            ></textarea>
+            <select id="bookCategory" required>
+              <option value="selling">Selling Book</option>
+              <option value="free">Free Reading</option>
+            </select>
+            <button type="submit" class="btn-primary">Add Book</button>
+          </form>
+        </section>
+
+        <!-- Books List -->
+        <section class="admin-section">
+          <h2>Manage Books</h2>
+          <div class="admin-books-grid" id="adminBooksGrid">
+            <!-- Books will be loaded dynamically -->
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Edit Book Modal -->
+    <div id="editBookModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Book</h2>
+        <form id="editBookForm" class="book-form">
+          <input type="hidden" id="editBookId" />
+          <input
+            type="text"
+            id="editBookTitle"
+            placeholder="Book Title"
+            required
+          />
+          <input
+            type="text"
+            id="editBookAuthor"
+            placeholder="Author Name"
+            required
+          />
+          <input
+            type="number"
+            id="editBookPrice"
+            placeholder="Price"
+            min="0"
+            step="0.01"
+            required
+          />
+          <input
+            type="number"
+            id="editBookStock"
+            placeholder="Stock Quantity"
+            min="0"
+            required
+          />
+          <input
+            type="url"
+            id="editBookImage"
+            placeholder="Image URL"
+            required
+          />
+          <textarea
+            id="editBookDescription"
+            placeholder="Description"
+            rows="4"
+            required
+          ></textarea>
+          <textarea
+            id="editBookContent"
+            placeholder="Book Content (Full text/chapters). You can use HTML tags like &lt;h2&gt; for chapters, &lt;p&gt; for paragraphs, &lt;br&gt; for line breaks."
+            rows="10"
+            required
+          ></textarea>
+          <select id="editBookCategory" required>
+            <option value="selling">Selling Book</option>
+            <option value="free">Free Reading</option>
+          </select>
+          <button type="submit" class="btn-primary">Update Book</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+      <div class="spinner"></div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
