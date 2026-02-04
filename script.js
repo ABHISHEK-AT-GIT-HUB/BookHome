@@ -107,69 +107,131 @@ function showProfile() {
     (order) => order.userEmail === currentUser.email,
   );
 
+  // Get user messages
+  const messages = JSON.parse(localStorage.getItem("contactMessages") || "[]");
+  const userMessages = messages.filter(
+    (msg) => msg.email === currentUser.email,
+  );
+
+  // Styles for profile design
+  const styles = `
+    <style>
+      .profile-header-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 20px;
+      }
+      .profile-avatar-large {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-color, #4a90e2);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+      .profile-name { margin: 0 0 5px 0; font-size: 1.5rem; }
+      .profile-email { margin: 0; color: #666; }
+      .profile-section { margin-bottom: 30px; }
+      .profile-section h3 { 
+        border-left: 4px solid var(--primary-color, #4a90e2);
+        padding-left: 10px;
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+      }
+      .profile-list { display: flex; flex-direction: column; gap: 15px; }
+      .profile-card {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        transition: transform 0.2s;
+      }
+      .profile-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+      .card-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+      .card-date { font-size: 0.85rem; color: #888; }
+      .card-status { font-weight: bold; color: #28a745; font-size: 0.85rem; }
+      .card-content { font-size: 0.95rem; color: #333; line-height: 1.4; }
+      .empty-state { text-align: center; padding: 20px; color: #888; background: #f8f9fa; border-radius: 8px; font-style: italic; }
+      [data-theme="dark"] .profile-card, [data-theme="dark"] .empty-state { background: #2d2d2d; border-color: #444; }
+      [data-theme="dark"] .card-content { color: #ddd; }
+      [data-theme="dark"] .profile-email { color: #aaa; }
+    </style>
+  `;
+
   let ordersHTML = "";
   if (userOrders.length === 0) {
     ordersHTML =
-      '<div class="no-orders">No orders yet. Start shopping to see your orders here!</div>';
+      '<div class="empty-state">No orders yet. Start shopping to see your orders here!</div>';
   } else {
     ordersHTML = userOrders
       .map(
         (order) => `
-            <div class="order-item">
-                <div class="order-header">
-                    <span class="order-date">${new Date(
-                      order.timestamp,
-                    ).toLocaleString()}</span>
-                    <span class="order-total">Rs.${order.total.toFixed(
-                      2,
-                    )}</span>
+            <div class="profile-card">
+                <div class="card-row">
+                    <span class="card-date">${new Date(order.timestamp).toLocaleDateString()}</span>
+                    <span class="card-status">Completed</span>
                 </div>
-                <ul class="order-items-list">
-                    ${order.items
-                      .map(
-                        (item) =>
-                          `<li>${item.title} x${item.quantity} - Rs.${(
-                            item.price * item.quantity
-                          ).toFixed(2)}</li>`,
-                      )
-                      .join("")}
-                </ul>
+                <div class="card-content">
+                    <strong>Order #${order.id.toString().slice(-6)}</strong><br>
+                    Items: ${order.items.length} | Total: Rs.${order.total.toFixed(2)}
+                </div>
             </div>
-            ${
-              order.shippingDetails
-                ? `
-            <div class="order-shipping-details">
-                <strong>Shipped to:</strong> ${order.shippingDetails.name}<br>
-                ${order.shippingDetails.address}, ${order.shippingDetails.city}, ${order.shippingDetails.state} ${order.shippingDetails.zip}<br>
-                Phone: ${order.shippingDetails.phone}
-            </div>`
-                : ""
-            }
         `,
       )
       .join("");
   }
 
+  let messagesHTML = "";
+  if (userMessages.length === 0) {
+    messagesHTML = '<div class="empty-state">No messages sent yet.</div>';
+  } else {
+    messagesHTML = userMessages
+      .map(
+        (msg) => `
+      <div class="profile-card">
+        <div class="card-row">
+          <span class="card-date">${new Date(msg.date).toLocaleDateString()}</span>
+          <span class="card-status" style="color: var(--primary-color)">Sent</span>
+        </div>
+        <div class="card-content">
+          "${msg.message}"
+        </div>
+      </div>
+    `,
+      )
+      .join("");
+  }
+
   profileContent.innerHTML = `
-        <div class="profile-info">
-            <div class="profile-info-item">
-                <span class="profile-info-icon">👤</span>
-                <div class="profile-info-content">
-                    <h3>Name</h3>
-                    <p>${currentUser.name}</p>
-                </div>
+        ${styles}
+        <div class="profile-header-section">
+            <div class="profile-avatar-large">
+                ${currentUser.name.charAt(0).toUpperCase()}
             </div>
-            <div class="profile-info-item">
-                <span class="profile-info-icon">📧</span>
-                <div class="profile-info-content">
-                    <h3>Email</h3>
-                    <p>${currentUser.email}</p>
-                </div>
+            <h2 class="profile-name">${currentUser.name}</h2>
+            <p class="profile-email">${currentUser.email}</p>
+        </div>
+        
+        <div class="profile-section">
+            <h3>My Orders</h3>
+            <div class="profile-list">
+                ${ordersHTML}
             </div>
         </div>
-        <div class="orders-section">
-            <h3>Order History</h3>
-            ${ordersHTML}
+
+        <div class="profile-section">
+            <h3>My Messages</h3>
+            <div class="profile-list">
+                ${messagesHTML}
+            </div>
         </div>
     `;
 
@@ -1534,15 +1596,31 @@ function loadBookPage(book, page) {
 function initializeContactPage() {
   const contactForm = document.getElementById("contactForm");
   if (contactForm) {
+    // Pre-fill form if user is logged in
+    const savedUser = localStorage.getItem("currentUser");
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      const nameInput = contactForm.querySelector('input[name="name"]');
+      const emailInput = contactForm.querySelector('input[name="email"]');
+      if (nameInput) nameInput.value = user.name;
+      if (emailInput) emailInput.value = user.email;
+    }
     contactForm.addEventListener("submit", handleContactSubmit);
   }
 }
 
 function handleContactSubmit(e) {
   e.preventDefault();
-  const name = e.target[0].value;
-  const email = e.target[1].value;
-  const message = e.target[2].value;
+
+  const formData = new FormData(e.target);
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const message = formData.get("message");
+
+  // Send data via email client
+  const subject = `Contact Message from ${name}`;
+  const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+  window.location.href = `mailto:support@bookhome.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   // Save message to localStorage
   const messages = JSON.parse(localStorage.getItem("contactMessages") || "[]");
